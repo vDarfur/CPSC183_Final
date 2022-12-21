@@ -72,9 +72,24 @@
 
     const ctx = canvas.getContext('2d');
 
+
+    // var canvas2 = document.createElement("orig_canvas");
+
+
+    
+    // Convert image to dataurl to pass as json param
+    // function make_base(imgSrc)
+    // {
+    //   base_image = new Image();
+    //   base_image.src = imgSrc;
+    //   base_image.onload = function(){
+    //     ctx.drawImage(base_image, 100, 100);
+    //   }
+    // }
+
     fileInput.addEventListener('change', () => {
       // const fs = require('fs');
-      
+      // var canvas2 = document.createElement("orig_canvas");
       const reader = new FileReader();
       reader.onload = function() {
         const img = new Image();
@@ -85,7 +100,9 @@
           ctx.drawImage(img, 0, 0);
           // console.log("img");
           // console.log(img);
-          orig_file.src = img.src;
+
+          // make_base(img.src);
+          // orig_file.src = img.src;
 
         // Try writing inserted file into memory
         // const fs = require('fs');

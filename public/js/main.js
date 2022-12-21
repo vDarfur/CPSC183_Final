@@ -24,7 +24,7 @@ function onSubmit(e) {
   document.querySelector('#image').src = '';
 
   const prompt = "black middle aged man";
-  const size = "small";
+  const size = "middle";
 
   const origFile = document.getElementById('orig_image');
   var origImage = new Image();
@@ -35,7 +35,7 @@ function onSubmit(e) {
   // Get image from canvas
   const canvas = document.getElementById('canvas');
   var alteredImage = new Image();
-  alteredImage.src = canvas.toDataURL(); // genereated url representation for requested img
+  alteredImage.src = canvas.toDataURL(1); // genereated url representation for requested img, provide num 0..1 for compression when encoding 
   alteredImage.id = "masked_Image"
 
   // const fs = require('fs');
@@ -44,8 +44,8 @@ function onSubmit(e) {
   // console.log("Orig");
   // console.log(origImage);
 
-  // console.log("altered");
-  // console.log(alteredImage);
+  console.log("altered");
+  console.log(alteredImage.src);
 
   // get an URL from the Blob
   // var b = alteredImage.src
@@ -58,7 +58,8 @@ function onSubmit(e) {
     return;
   }
 
-  generateImageRequest(origImage.src, alteredImage.src, prompt, size);
+  // generateImageRequest(origImage.src, alteredImage.src, prompt, size);
+  generateImageRequest(alteredImage.src, alteredImage.src, prompt, size);
   // generateImageRequest(origFile, canvas, prompt, size);
 
 }
@@ -73,8 +74,8 @@ async function generateImageRequest(origImage, alteredImage,prompt, size) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // origImage,
-        // alteredImage,
+        origImage,
+        alteredImage,
         prompt,
         size,
       }),
@@ -82,6 +83,7 @@ async function generateImageRequest(origImage, alteredImage,prompt, size) {
 
     if (!response.ok) {
       removeSpinner();
+      console.log(response)
       throw new Error('That image could not be generated');
     }
 

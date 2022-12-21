@@ -6,9 +6,9 @@ var bodyParser = require('body-parser'); // trying to limitfor setting limits on
 
 const app = express();
 
-// Enable body parser to limit image urls length
+// Enable body parser to limit image urls length. Note: I think this just returns an error and doesn't compress
 app.use(bodyParser.json({limit: '10mb'}));
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '4mb', extended: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

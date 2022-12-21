@@ -7,8 +7,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const generateImage = async (req, res) => {
-  const { prompt, size } = req.body;
-  // const { origImage, alteredImage, prompt, size } = req.body;
+  // const { prompt, size } = req.body;
+  const { origImage, alteredImage, prompt, size } = req.body;
   const imageSize =
     size === 'small' ? '256x256' : size === 'medium' ? '512x512' : '1024x1024';
 
@@ -25,10 +25,10 @@ const generateImage = async (req, res) => {
           // Masked image generation
     const response = await openai.createImageEdit({
       
-      // image:origImage, // uploded image
-      // mask:alteredImage, // mask
-      image: fs.createReadStream("./images/orig.png"),
-      mask: fs.createReadStream("./images/mask.png"),
+      image:origImage, // uploded image
+      mask:alteredImage, // mask
+      // image: fs.createReadStream("./images/orig.png"),
+      // mask: fs.createReadStream("./images/mask.png"),
       prompt, // prompt
       n: 1,
       size: imageSize,
