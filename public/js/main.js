@@ -1,28 +1,69 @@
+  // Messing around with blib creation to shorten URI
+// function dataUriToBlob(dataURI) {
+//   var byteString = atob(dataURI.split(',')[1]);
+//   var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+//   var arrayBuffer = new ArrayBuffer(byteString.length);
+//   var _ia = new Uint8Array(arrayBuffer);
+//   for (var i = 0; i < byteString.length; i++) {
+//       _ia[i] = byteString.charCodeAt(i);
+//   }
+//   var dataView = new DataView(arrayBuffer);
+//   var blob = new Blob([dataView], { type: mimeString });
+//   return blob;
+// }
+
+// // cross browser cruft
+// var get_URL = function () {
+//   return window.URL || window.webkitURL || window;
+// };
+
 function onSubmit(e) {
   e.preventDefault();
 
   document.querySelector('.msg').textContent = '';
   document.querySelector('#image').src = '';
 
-  const prompt = "cheetah";
-  const size = "medium";
+  const prompt = "black middle aged man";
+  const size = "small";
 
+  const origFile = document.getElementById('orig_image');
+  var origImage = new Image();
+  // origImage.src = origFile.toDataURL(); // genereated url representation for requested img
+  // origImage.src = origFile.toDataURL("image/jpeg", 0.5); // genereated url representation for requested img
+  origImage.id = "orginal_Image"
 
   // Get image from canvas
   const canvas = document.getElementById('canvas');
   var alteredImage = new Image();
-  alteredImage.src = canvas.toDataURL();
-  alteredImage.id = "alteredImage"
+  alteredImage.src = canvas.toDataURL(); // genereated url representation for requested img
+  alteredImage.id = "masked_Image"
+
+  // const fs = require('fs');
+
+
+  // console.log("Orig");
+  // console.log(origImage);
+
+  // console.log("altered");
+  // console.log(alteredImage);
+
+  // get an URL from the Blob
+  // var b = alteredImage.src
+  // var blob = dataUriToBlob(b);
+  // var url = get_URL().createObjectURL(blob);
+  // console.log(url);
 
   if (prompt === '') {
     alert('Please add some text');
     return;
   }
 
-  generateImageRequest(prompt, size);
+  generateImageRequest(origImage.src, alteredImage.src, prompt, size);
+  // generateImageRequest(origFile, canvas, prompt, size);
+
 }
 
-async function generateImageRequest(prompt, size) {
+async function generateImageRequest(origImage, alteredImage,prompt, size) {
   try {
     showSpinner();
 
@@ -32,6 +73,8 @@ async function generateImageRequest(prompt, size) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        // origImage,
+        // alteredImage,
         prompt,
         size,
       }),
