@@ -1,3 +1,49 @@
+const fileInput = document.querySelector('#image-file');
+const canvas = document.querySelector('#canvas');
+console.log('canvas');
+console.log(canvas);
+const ctx = canvas.getContext('2d');
+
+fileInput.addEventListener('change', () => {
+  const reader = new FileReader();
+  reader.onload = function() {
+    const img = new Image();
+    img.onload = function() {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      console.log(img.width);
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(fileInput.files[0]);
+});
+let isDrawing = false;
+
+canvas.addEventListener('mousedown', (event) => {
+  isDrawing = true;
+  ctx.beginPath();
+  ctx.moveTo(event.offsetX, event.offsetY);
+});
+
+canvas.addEventListener('mousemove', (event) => {
+if (isDrawing) {
+// Set the composite operation of the canvas context to "destination-out"
+// to clear the pixels from the canvas
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineTo(event.offsetX, event.offsetY);
+
+  ctx.stroke();
+
+  ctx.lineWidth = 50;
+  ctx.lineCap = "round";
+}
+});
+
+canvas.addEventListener('mouseup', () => {
+isDrawing = false;
+}); 
+
 function onSubmit(e) {
   e.preventDefault();
 
@@ -9,32 +55,31 @@ function onSubmit(e) {
 
 
   // Get image from canvas
-  const canvas = document.getElementById('canvas');
-  var alteredImage = new Image();
-  alteredImage.src = canvas.toDataURL();
-  alteredImage.id = "alteredImage"
 
+  console.log(canvas);
+  const image = new Image();
+  image.src = canvas.toDataURL();
+  image.id = "image"
+  console.log(image.src); 
   if (prompt === '') {
     alert('Please add some text');
     return;
   }
-
-  generateImageRequest(prompt, size);
+  generateImageRequest(image, size);
 }
 
-async function generateImageRequest(prompt, size) {
+async function generateImageRequest(image, size) {
   try {
     showSpinner();
-
     const response = await fetch('/openai/generateimage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        prompt,
-        size,
-      }),
+      body: {
+        image,
+        size: JSON.stringify(size),
+      },
     });
 
     if (!response.ok) {

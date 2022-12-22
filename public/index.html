@@ -42,71 +42,14 @@
 
 
     </div> 
-    <div class="jumbotron" style="padding: 10%">
-      <section class="showcase">
-        <form id="image-form">
-          <label for="image-file">Select an image file:</label><br>
-          <input type="file" id="image-file" accept="image/*">
-
-          <button type="submit" class="btn btn-primary">Generate</button>
-        </form>
-        <canvas id="canvas"></canvas>
-      </section>
-      
-      <section class="image">
-        <div class="image-container">
-          <h2 class="msg"></h2>
-          <img src="" alt="" id="image" />
-        </div>
-      </section>
+    <div class="jumbotron mx-auto" style="padding: 10%; text-align: center ;">
+      <a class="btn btn-primary" href="maskMe.html"> MaskMe Demo </a>
+      <a class="btn btn-primary" href="fuzzMe.html"> FuzzMe Demo </a>
     </div>
 
     <div class="spinner"></div>
   </body>
   <script>
-    const fileInput = document.querySelector('#image-file');
-    const canvas = document.querySelector('#canvas');
-    const ctx = canvas.getContext('2d');
-
-    fileInput.addEventListener('change', () => {
-      const reader = new FileReader();
-      reader.onload = function() {
-        const img = new Image();
-        img.onload = function() {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          console.log(img.width);
-          ctx.drawImage(img, 0, 0);
-        };
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(fileInput.files[0]);
-    });
-    let isDrawing = false;
-
-    canvas.addEventListener('mousedown', (event) => {
-      isDrawing = true;
-      ctx.beginPath();
-      ctx.moveTo(event.offsetX, event.offsetY);
-    });
-
-    canvas.addEventListener('mousemove', (event) => {
-    if (isDrawing) {
-    // Set the composite operation of the canvas context to "destination-out"
-    // to clear the pixels from the canvas
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.lineTo(event.offsetX, event.offsetY);
-
-      ctx.stroke();
-
-      ctx.lineWidth = 50;
-      ctx.lineCap = "round";
-    }
-  });
-
-  canvas.addEventListener('mouseup', () => {
-    isDrawing = false;
-  }); 
-
+    
   </script>
 </html>
