@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fuzz Me</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/spinner.css" />
+    <script src="js/main.js" defer> </script>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  </body>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarExample01"
+            aria-controls="navbarExample01"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarExample01">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item active">
+                <a class="nav-link" aria-current="page" href="index.html">Home</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="jumbotron  bg-white mx-auto" style="width: 50%; ">
+      <h1 style="text-align: center; color:darkslategrey">Welcome to MaskMe</h1>
+    </div> 
+    <div class="jumbotron mx-auto" style="padding: 10%">
+      <h4 style="text-align: center;"> This is a demo of MaskMe's functionality </h4>
+    </div>
+    <div class="jumbotron"> 
+        <div class="row">
+            <div class="col">
+                <img style="text-align: center;" src="img/MaskMe/manwalkingdog.webp" width="500" height="340">
+            </div>
+            <div class="col">
+              <h4> This is an image of man named Jimmy walking a dog at a beach. Jimmy doesn't want people to know where he walks his dog. We can protect Jimmy by masking him. Hit mask below to protect Jimmy. </h4>
+              <button id="generate" class="btn btn-primary"onclick="mainFunc()"> Mask </button>
+
+            </div>
+          </div>
+    </div>
+    <div class="spinner"></div>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <img id="image1" src = ""/>
+          </div>
+          <div class="col-sm">
+            <img id="image2" src = ""/>
+          </div>
+          <div class="col-sm">
+            <img id="image3" src = ""/>
+          </div>
+          <div class="col-sm">
+            <img id="image4" src = ""/>
+          </div>
+        </div>
+      </div>
+   
+  </body>
+  <script>
+    function showSpinner() {
+        document.querySelector('.spinner').classList.add('show');
+    }
+
+    function removeSpinner() {
+        document.querySelector('.spinner').classList.remove('show');
+    }
+    function show() {
+        /* Get image and change value
+        of src attribute */
+        let image1 = document.getElementById("image1");
+        let image2 = document.getElementById("image2");
+        let image3 = document.getElementById("image3");
+        let image4 = document.getElementById("image4");
+        
+        image1.src=  "img/MaskMe/MaskMe1.png"
+        image2.src = "img/MaskMe/MaskMe2.png"
+        image3.src = "img/MaskMe/MaskMe3.png"
+        image4.src = "img/MaskMe/MaskMe4.png" 
+
+        document.getElementById("generate")
+                .style.display = "none";
+        removeSpinner();
+    } 
+    function mainFunc(){
+        showSpinner();
+        setTimeout(show, 1000);
+    }
+  </script>
+</html>

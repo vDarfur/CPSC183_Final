@@ -1,21 +1,48 @@
-  // Messing around with blib creation to shorten URI
-// function dataUriToBlob(dataURI) {
-//   var byteString = atob(dataURI.split(',')[1]);
-//   var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-//   var arrayBuffer = new ArrayBuffer(byteString.length);
-//   var _ia = new Uint8Array(arrayBuffer);
-//   for (var i = 0; i < byteString.length; i++) {
-//       _ia[i] = byteString.charCodeAt(i);
-//   }
-//   var dataView = new DataView(arrayBuffer);
-//   var blob = new Blob([dataView], { type: mimeString });
-//   return blob;
-// }
+const fileInput = document.querySelector('#image-file');
+const canvas = document.querySelector('#canvas');
+console.log('canvas');
+console.log(canvas);
+const ctx = canvas.getContext('2d');
 
-// // cross browser cruft
-// var get_URL = function () {
-//   return window.URL || window.webkitURL || window;
-// };
+fileInput.addEventListener('change', () => {
+  const reader = new FileReader();
+  reader.onload = function() {
+    const img = new Image();
+    img.onload = function() {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      console.log(img.width);
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(fileInput.files[0]);
+});
+let isDrawing = false;
+
+canvas.addEventListener('mousedown', (event) => {
+  isDrawing = true;
+  ctx.beginPath();
+  ctx.moveTo(event.offsetX, event.offsetY);
+});
+
+canvas.addEventListener('mousemove', (event) => {
+if (isDrawing) {
+// Set the composite operation of the canvas context to "destination-out"
+// to clear the pixels from the canvas
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineTo(event.offsetX, event.offsetY);
+
+  ctx.stroke();
+
+  ctx.lineWidth = 50;
+  ctx.lineCap = "round";
+}
+});
+
+canvas.addEventListener('mouseup', () => {
+isDrawing = false;
+}); 
 
 function onSubmit(e) {
   e.preventDefault();
@@ -33,52 +60,31 @@ function onSubmit(e) {
   origImage.id = "orginal_Image"
 
   // Get image from canvas
-  const canvas = document.getElementById('canvas');
-  var alteredImage = new Image();
-  alteredImage.src = canvas.toDataURL(1); // genereated url representation for requested img, provide num 0..1 for compression when encoding 
-  alteredImage.id = "masked_Image"
 
-  // const fs = require('fs');
-
-
-  // console.log("Orig");
-  // console.log(origImage);
-
-  console.log("altered");
-  console.log(alteredImage.src);
-
-  // get an URL from the Blob
-  // var b = alteredImage.src
-  // var blob = dataUriToBlob(b);
-  // var url = get_URL().createObjectURL(blob);
-  // console.log(url);
-
+  console.log(canvas);
+  const image = new Image();
+  image.src = canvas.toDataURL();
+  image.id = "image"
+  console.log(image.src); 
   if (prompt === '') {
     alert('Please add some text');
     return;
   }
-
-  // generateImageRequest(origImage.src, alteredImage.src, prompt, size);
-  generateImageRequest(alteredImage.src, alteredImage.src, prompt, size);
-  // generateImageRequest(origFile, canvas, prompt, size);
-
+  generateImageRequest(image, size);
 }
 
-async function generateImageRequest(origImage, alteredImage,prompt, size) {
+async function generateImageRequest(image, size) {
   try {
     showSpinner();
-
     const response = await fetch('/openai/generateimage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        origImage,
-        alteredImage,
-        prompt,
-        size,
-      }),
+      body: {
+        image,
+        size: JSON.stringify(size),
+      },
     });
 
     if (!response.ok) {

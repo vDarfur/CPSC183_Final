@@ -7,29 +7,17 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 const generateImage = async (req, res) => {
-  // const { prompt, size } = req.body;
-  const { origImage, alteredImage, prompt, size } = req.body;
+  const { image , size } = req.body;
+  const buffer = [image];
+  buffer.name = "image.jpeg";
   const imageSize =
     size === 'small' ? '256x256' : size === 'medium' ? '512x512' : '1024x1024';
 
     
   try {
-            // Random Image genaration
-    // const response = await openai.createImage({
-    //   prompt:"umbrealla",
-    //   n: 1,
-    //   size: imageSize,
-    // });
-    // const imageUrl = response.data.data[0].url;
-
-          // Masked image generation
-    const response = await openai.createImageEdit({
-      
-      image:origImage, // uploded image
-      mask:alteredImage, // mask
-      // image: fs.createReadStream("./images/orig.png"),
-      // mask: fs.createReadStream("./images/mask.png"),
-      prompt, // prompt
+    console.log(buffer);
+    const response = await openai.createImageVariation({
+      image,
       n: 1,
       size: imageSize,
   });
