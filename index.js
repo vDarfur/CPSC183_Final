@@ -2,12 +2,16 @@ const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
 const port = process.env.PORT || 5000;
+var bodyParser = require('body-parser'); // trying to limitfor setting limits on daturl
 
 const app = express();
 
-// Enable body parser
+// Enable body parser to limit image urls length. Note: I think this just returns an error and doesn't compress
+app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({limit: '4mb', extended: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,7 +1,8 @@
 const { Configuration, OpenAIApi } = require('openai');
+var fs = require('fs');
 
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: 'API_KEY',
 });
 const openai = new OpenAIApi(configuration);
 
@@ -12,15 +13,18 @@ const generateImage = async (req, res) => {
   const imageSize =
     size === 'small' ? '256x256' : size === 'medium' ? '512x512' : '1024x1024';
 
+    
   try {
     console.log(buffer);
     const response = await openai.createImageVariation({
       image,
       n: 1,
       size: imageSize,
-    });
+  });
+    const image_url = response.data.data[0].url;
+    
 
-    const imageUrl = response.data.data[0].url;
+
     res.status(200).json({
       success: true,
       data: imageUrl,

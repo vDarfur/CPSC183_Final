@@ -50,9 +50,14 @@ function onSubmit(e) {
   document.querySelector('.msg').textContent = '';
   document.querySelector('#image').src = '';
 
-  const prompt = "cheetah";
-  const size = "medium";
+  const prompt = "black middle aged man";
+  const size = "middle";
 
+  const origFile = document.getElementById('orig_image');
+  var origImage = new Image();
+  // origImage.src = origFile.toDataURL(); // genereated url representation for requested img
+  // origImage.src = origFile.toDataURL("image/jpeg", 0.5); // genereated url representation for requested img
+  origImage.id = "orginal_Image"
 
   // Get image from canvas
 
@@ -84,6 +89,7 @@ async function generateImageRequest(image, size) {
 
     if (!response.ok) {
       removeSpinner();
+      console.log(response)
       throw new Error('That image could not be generated');
     }
 
